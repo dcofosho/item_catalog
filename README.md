@@ -1,6 +1,6 @@
-<h1>Daniel Cohen: Menu App</h1>
+<h1>Daniel Cohen: Item Catalog App</h1>
 
-<p> This is code for maintaining and accessing an sqlite database for restaurants and their menu's</p>
+<p> This is code for maintaining and accessing an sqlite database for catalog items sorted by catagories</p>
 
 <hr>
 

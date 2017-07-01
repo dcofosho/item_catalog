@@ -3,7 +3,6 @@ h1, h2, h3, h4, h5       { color: #FFFFFF; }
 h1, h2          { font-family: 'Georgia', serif; margin: 0; }
 h1              { border-bottom: 2px solid #eee; }
 h2              { font-size: 1.2em; }
-
 p, dd, dt               { color: #CCCCCC;}
 
 a {text-decoration: none; color:#FFFFCC; font-size: .75em;}
@@ -15,5 +14,4 @@ a {text-decoration: none; color:#FFFFCC; font-size: .75em;}
 .description {color: #FFFFFF;}
 .price {text-align: right; width:50%; float: right; color: #FFFFFF;}
 .editdeletepane{}
-
 .flash          { background: #cee5F5; }

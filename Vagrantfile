@@ -5,7 +5,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = "bento/ubuntu-16.04-i386"
   config.vm.network "forwarded_port", guest: 9000, host: 9000, host_ip: "127.0.0.1"
   config.vm.network "forwarded_port", guest: 8081, host: 8081, host_ip: "127.0.0.1"
-  config.vm.network "forwarded_port", guest: 5001, host: 5001, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 5003, host: 5003, host_ip: "127.0.0.1"
     # Work around disconnected virtual network cable.
   config.vm.provider "virtualbox" do |vb|
     vb.customize ["modifyvm", :id, "--cableconnected1", "on"]

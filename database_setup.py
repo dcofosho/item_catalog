@@ -9,10 +9,14 @@ from sqlalchemy.orm import sessionmaker
 
 Base = declarative_base()
 
-class Restaurant(Base):
-	__tablename__ = "restaurant"
+class User(Base):
+	__tablename__ = "user"
 	name = Column(
 		String(80), nullable = False)
+	email = Column(
+		String(80), nullable = True)
+	picture = Column(
+		String(80), nullable = True)
 	id = Column(
 		Integer, primary_key = True)
 
@@ -21,21 +25,45 @@ class Restaurant(Base):
 		#Return object data in easily serializeable format
 		return {
         	'name': self.name,
+        	'email': self.email,
+        	'picture': self.picture,
         	'id': self.id,
     	}
 
-class MenuItem(Base):
-	__tablename__ = 'menu_item'
+
+class Category(Base):
+	__tablename__ = "category"
+	name = Column(
+		String(80), nullable = False)
+	user_id = Column(
+		Integer, ForeignKey('user.id'))
+	id = Column(
+		Integer, primary_key = True)
+	user = relationship(User)
+
+	@property
+	def serialize(self):
+		#Return object data in easily serializeable format
+		return {
+        	'name': self.name,
+        	'user_id': self.user_id,
+        	'id': self.id,
+    	}
+
+class Item(Base):
+	__tablename__ = 'item'
 	name = Column(String(80), nullable = False)
 	id = Column(Integer, primary_key = True)
-	course = Column(String(250))
 	description = Column(String(250))
 	price = Column(String(8))
 
-	restaurant_id = Column(
-		Integer, ForeignKey('restaurant.id'))
-	
-	restaurant = relationship(Restaurant)
+	category_id = Column(
+		Integer, ForeignKey('category.id'))
+	user_id = Column(
+		Integer, ForeignKey('user.id'))
+
+	category = relationship(Category)
+	user = relationship(User)
 
 	@property
 	def serialize(self):
@@ -43,14 +71,15 @@ class MenuItem(Base):
 		return{
 			'name': self.name,
 			'description': self.description,
+			'category_id': self.category_id,
+			'user_id': self.user_id,
 			'id': self.id,
 			'price': self.price,
-			'course': self.course,
 		}
 
 
 ######INSERT AT END OF FILE#####
 
-engine = create_engine('sqlite:///restaurantmenu.db')
+engine = create_engine('sqlite:///itemcatalog.db')
 
 Base.metadata.create_all(engine)
