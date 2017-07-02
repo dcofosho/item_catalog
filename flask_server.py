@@ -156,38 +156,18 @@ def fbconnect():
     data = json.loads(result)
     login_session['provider'] = 'facebook'
     login_session['username'] = data["name"]
-    #login_session['email'] = data["email"]
     login_session['facebook_id'] = data["id"]
-
-    # The token must be stored in the login_session in order to properly logout
     login_session['access_token'] = token
-
-    # Get user picture
-    # url = 'https://graph.facebook.com/v2.9/me/picture?access_token=%s&redirect=0&height=200&width=200' % token
-    # h = httplib2.Http()
-    # result = h.request(url, 'GET')[1]
-    # data = json.loads(result)
-
-    # login_session['picture'] = data["data"]["url"]
-
-    # see if user exists
     user_id = getUserID(login_session['email'])
     if not user_id:
         user_id = createUser(login_session)
     login_session['user_id'] = user_id
-
     output = ''
     output += '<h1>Welcome, '
     output += login_session['username']
-
     output += '!</h1>'
-    # output += '<img src="'
-    # output += login_session['picture']
-    # output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
-
     flash("Now logged in as %s" % login_session['username'])
     return output
-
 
 @app.route('/fbdisconnect')
 def fbdisconnect():
@@ -200,7 +180,6 @@ def fbdisconnect():
     return "you have been logged out"
 
 # DISCONNECT - Revoke a current user's token and reset their login_session
-
 @app.route('/gdisconnect')
 def gdisconnect():
     access_token = login_session['access_token']
@@ -232,27 +211,19 @@ def gdisconnect():
     	response.headers['Content-Type'] = 'application/json'
     	return response
 
-
 # JSON APIs to view Restaurant Information
 @app.route('/category/<int:category_id>/item/JSON')
+@app.route('/category/JSON')
 def categoryJSON(category_id):
     category = session.query(Category).filter_by(id=category_id).one()
     items = session.query(Item).filter_by(
         category_id=category_id).all()
     return jsonify(items=[i.serialize for i in items])
 
-
 @app.route('/category/<int:category_id>/item/<int:item_id>/JSON')
 def itemJSON(category_id, item_id):
     item = session.query(Item).filter_by(id=item_id).one()
     return jsonify(item=item.serialize)
-
-
-@app.route('/category/JSON')
-def categoryJSON():
-    categories = session.query(Category).all()
-    return jsonify(categories=[r.serialize for r in categories])
-
 
 # Show all categories
 @app.route('/')
@@ -292,7 +263,6 @@ def editCategory(category_id):
             return redirect(url_for('showCategories'))
     else:
         return render_template('editCategory.html', category=editedCategory)
-
 
 # Delete a category
 @app.route('/category/<int:category_id>/delete/', methods=['GET', 'POST'])
@@ -343,7 +313,6 @@ def newItem(category_id):
         return redirect(url_for('showItems', category_id=category_id))
     else:
         return render_template('newitem.html', category= category, category_id=category_id)
-        
 
 # Edit a menu item
 @app.route('/category/<int:category_id>/items/<int:item_id>/edit', methods=['GET', 'POST'])
@@ -385,9 +354,8 @@ def deleteItem(category_id, item_id):
         flash('Menu Item Successfully Deleted')
         return redirect(url_for('showItems', category_id=category_id))
     else:
-        return render_template('deleteItem.html', item=itemToDelete)
-        
- 
+        return render_template('deleteItem.html', item=itemToDelete)    
+
 def getUserID(email):
 	try:
 		user = session.query(User).filter_by(email = email).one()
