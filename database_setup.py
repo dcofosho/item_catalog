@@ -5,7 +5,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, backref
 
 Base = declarative_base()
 
@@ -62,7 +62,7 @@ class Item(Base):
 	user_id = Column(
 		Integer, ForeignKey('user.id'))
 
-	category = relationship(Category)
+	category = relationship(Category, backref=backref('item', cascade='all, delete'))
 	user = relationship(User)
 
 	@property
